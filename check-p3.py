@@ -30,6 +30,8 @@ files = ['README.md',
          '.gitignore',
          'check-p3.py',
          'practica3-chistes.py',
+         'chistes2.xml',
+         'karaoke.smil',
          '.git'
          ]
 
