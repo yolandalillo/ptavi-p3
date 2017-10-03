@@ -29,6 +29,7 @@ files = ['README.md',
          'LICENSE',
          '.gitignore',
          'check-p3.py',
+         'practica3-chistes.py',
          '.git'
          ]
 
