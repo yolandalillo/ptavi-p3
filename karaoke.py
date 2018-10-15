@@ -7,6 +7,7 @@ Created on Mon Oct  8 17:15:41 2018
 """
 
 import sys
+import json
 import smallsmilhandler
 from xml.sax import make_parser
 
@@ -23,8 +24,14 @@ if __name__ == "__main__":
         for frase in todo:
             for atributo in frase:
                 if frase[atributo] != "":
-                    print(atributo, "=", frase[atributo], end='\t')
+                    print(atributo, "=","'",  frase[atributo], "'", end='\t')
             print(end='\n')
-
+            
+        ficherojson = ''
+        if ficherojson == '':
+            smiljson = sys.argv[1].replace('.smil', '.json')
+            
+        with open(smiljson, 'w') as filejson:
+            json.dump(todo, filejson, indent=4)
     else:
         print("Usage: python3 karaoke.py file.smil.")
