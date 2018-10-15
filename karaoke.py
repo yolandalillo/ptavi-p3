@@ -12,33 +12,58 @@ import json
 import urllib.request
 from xml.sax import make_parser
 
-if __name__ == "__main__":
-    """
-    Programa principal
-    """
-    if len(sys.argv) == 2:
-        smil = smallsmilhandler.SmallSMILHandler()
-        parser = make_parser()
-        parser.setContentHandler(smil)
-        parser.parse(open(sys.argv[1]))
-        todo = smil.get_tags()
-        
-        for frase in todo:
+
+class KaraokeLocal:
+
+    def __init__(self, archivo):
+        try:
+            archivo = sys.argv[1]
+            smil = smallsmilhandler.SmallSMILHandler()
+            parser = make_parser()
+            parser.setContentHandler(smil)
+            parser.parse(open(archivo))
+            self.todo = smil.get_tags()
+        except FileNotFoundError:
+            sys.exit('File not found')
+
+    def __str__(self):
+        r = ''
+        for frase in self.todo:
+            for atributo in frase:
+                if frase[atributo] != "":
+                    r += atributo + "=" + "'" + frase[atributo] + "'" + '\t'
+            r += '\n'
+            return r
+
+    def to_json(self, smiljson, ficherojson=''):
+        if ficherojson == '':
+            smiljson = sys.argv[1].replace('.smil', '.json')
+
+        with open(smiljson, 'w') as filejson:
+            json.dump(self.todo, filejson, indent=3)
+
+    def do_local(self):
+        for frase in self.todo:
             for atributo in frase:
                 if atributo == "src":
                     if frase[atributo].startswith('http://'):
                         direccion = frase[atributo].split('/')[-1]
                         urllib.request.urlretrieve(frase[atributo])
                         frase[atributo] = direccion
-                if frase[atributo] != "":
-                    print(atributo, "=","'",  frase[atributo], "'", end='\t')
-            print(end='\n')
-            
-        ficherojson = ''
-        if ficherojson == '':
-            smiljson = sys.argv[1].replace('.smil', '.json')
-            
-        with open(smiljson, 'w') as filejson:
-            json.dump(todo, filejson, indent=4)
-    else:
-        print("Usage: python3 karaoke.py file.smil.")
+
+
+if __name__ == "__main__":
+    """
+    Programa principal
+    """
+    try:
+        archivo = sys.argv[1]
+        karaoke = KaraokeLocal(archivo)
+
+    except FileNotFoundError:
+        sys.exit('usage error: python3 karaoke.py file.smil')
+    print(karaoke)
+    karaoke.to_json(archivo)
+    karaoke.do_local()
+    karaoke.to_json(archivo, 'local.json')
+    print(karaoke)
