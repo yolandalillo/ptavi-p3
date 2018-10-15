@@ -7,8 +7,9 @@ Created on Mon Oct  8 17:15:41 2018
 """
 
 import sys
-import json
 import smallsmilhandler
+import json
+import urllib.request
 from xml.sax import make_parser
 
 if __name__ == "__main__":
@@ -21,8 +22,14 @@ if __name__ == "__main__":
         parser.setContentHandler(smil)
         parser.parse(open(sys.argv[1]))
         todo = smil.get_tags()
+        
         for frase in todo:
             for atributo in frase:
+                if atributo == "src":
+                    if frase[atributo].startswith('http://'):
+                        direccion = frase[atributo].split('/')[-1]
+                        urllib.request.urlretrieve(frase[atributo])
+                        frase[atributo] = direccion
                 if frase[atributo] != "":
                     print(atributo, "=","'",  frase[atributo], "'", end='\t')
             print(end='\n')
