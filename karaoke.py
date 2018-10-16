@@ -23,7 +23,7 @@ class KaraokeLocal:
             parser.setContentHandler(smil)
             parser.parse(open(archivo))
             self.todo = smil.get_tags()
-            
+
         except FileNotFoundError:
             sys.exit('File not found')
 
