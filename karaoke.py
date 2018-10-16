@@ -61,7 +61,7 @@ if __name__ == "__main__":
         archivo = sys.argv[1]
         karaoke = KaraokeLocal(archivo)
 
-    except FileNotFoundError:
+    except IndexError:
         sys.exit('usage error: python3 karaoke.py file.smil')
     karaoke.to_json(archivo)
     karaoke.do_local()
