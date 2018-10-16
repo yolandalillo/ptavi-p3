@@ -63,6 +63,7 @@ if __name__ == "__main__":
 
     except IndexError:
         sys.exit('usage error: python3 karaoke.py file.smil')
+    print(karaoke)
     karaoke.to_json(archivo)
     karaoke.do_local()
     karaoke.to_json(archivo, 'local.json')
