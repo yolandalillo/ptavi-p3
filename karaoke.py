@@ -23,6 +23,7 @@ class KaraokeLocal:
             parser.setContentHandler(smil)
             parser.parse(open(archivo))
             self.todo = smil.get_tags()
+            
         except FileNotFoundError:
             sys.exit('File not found')
 
@@ -33,13 +34,13 @@ class KaraokeLocal:
                 if frase[atributo] != "":
                     r += atributo + "=" + "'" + frase[atributo] + "'" + '\t'
             r += '\n'
-            return r
+        return r
 
-    def to_json(self, smiljson, ficherojson=''):
+    def to_json(self, smil, ficherojson=''):
         if ficherojson == '':
-            smiljson = sys.argv[1].replace('.smil', '.json')
+            ficherojson = smil.replace('.smil', '.json')
 
-        with open(smiljson, 'w') as filejson:
+        with open(ficherojson, 'w') as filejson:
             json.dump(self.todo, filejson, indent=3)
 
     def do_local(self):
@@ -62,7 +63,6 @@ if __name__ == "__main__":
 
     except FileNotFoundError:
         sys.exit('usage error: python3 karaoke.py file.smil')
-    print(karaoke)
     karaoke.to_json(archivo)
     karaoke.do_local()
     karaoke.to_json(archivo, 'local.json')
